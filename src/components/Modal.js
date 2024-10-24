@@ -2,22 +2,30 @@ import Links from "./Links";
 import { forwardRef } from "react";
 
 const Modal = forwardRef(function MyModal(
-  { title, description, closeModal },
+  { title, description, closeModal, isOpen, showModal },
   ref
 ) {
   return (
     <div
-      className="relative z-10"
+      className={"relative z-10 " + (isOpen ? "" : "invisible")}
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
     >
       <div
-        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+        className={
+          "fixed inset-0 bg-gray-500 transition-opacity duration-300 " +
+          (showModal ? "opacity-75" : "opacity-0")
+        }
         aria-hidden="true"
       />
 
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div
+        className={
+          "fixed inset-0 z-10 w-screen overflow-y-auto " +
+          (showModal ? "opacity-100" : "opacity-0")
+        }
+      >
         <div className="flex h-screen items-center justify-center p-4 text-center sm:p-0">
           <div
             className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg"

@@ -6,16 +6,26 @@ import { useOutsideClick } from "./hooks/useOutsideClick";
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const modalRef = useRef(null);
 
   const openModal = () => {
     setIsModalOpen(true);
+    setShowModal(true);
   };
 
   const closeModal = useCallback(() => {
-    setIsModalOpen(false);
-  }, [setIsModalOpen]);
+    if (!isModalOpen) return;
+
+    // Trigger content opacity transition
+    setShowModal(false);
+
+    // Actually close the modal
+    setTimeout(() => {
+      setIsModalOpen(false);
+    }, 300);
+  }, [isModalOpen, setIsModalOpen]);
 
   // Close Modal after clicking outside of it
   useOutsideClick(modalRef, closeModal);
@@ -53,14 +63,14 @@ function App() {
         buttonLabel="Open Modal Window"
         buttonAction={openModal}
       />
-      {isModalOpen && (
-        <Modal
-          ref={modalRef}
-          title={title}
-          description={content}
-          closeModal={closeModal}
-        />
-      )}
+      <Modal
+        ref={modalRef}
+        title={title}
+        description={content}
+        closeModal={closeModal}
+        isOpen={isModalOpen}
+        showModal={showModal}
+      />
     </div>
   );
 }
